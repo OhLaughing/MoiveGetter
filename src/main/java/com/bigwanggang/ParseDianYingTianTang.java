@@ -6,7 +6,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by gustaov on 2017/8/27.
@@ -23,7 +22,7 @@ public class ParseDianYingTianTang {
         Document document = Jsoup.connect(url).get();
         Elements elements = document.getElementsByTag("p");
         for (Element e : elements) {
-            System.out.println(e.);
+            System.out.println(e.text());
         }
     }
 
