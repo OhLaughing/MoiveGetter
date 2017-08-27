@@ -5,6 +5,7 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,20 @@ public class MyCrawler extends WebCrawler {
             String text = htmlParseData.getText();
             String html = htmlParseData.getHtml();
 
+            ParseDianYingTianTang parseDianYingTianTang = new ParseDianYingTianTang();
+            parseDianYingTianTang.getInfoFromHTMLStr(html);
+            try {
+                parseDianYingTianTang.parse();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String[] strings = parseDianYingTianTang.getInfos();
+            if (strings != null) {
+                for (String s : strings) {
+                    System.out.println(s);
+                }
+            }
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
             System.out.println("Text length: " + text.length());
