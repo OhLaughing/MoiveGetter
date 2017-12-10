@@ -5,6 +5,8 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -55,10 +57,10 @@ public class MyCrawler extends WebCrawler {
             }
 
             String[] strings = parseDianYingTianTang.getInfos();
-            if (strings != null) {
-                for (String s : strings) {
-                    System.out.println(s);
-                }
+            try {
+                writeFile(strings, ParseDianYingTianTang.FILEPATH, url);
+            } catch (Exception e) {
+                System.out.println("将电影信息写进文件失败");
             }
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
@@ -66,5 +68,14 @@ public class MyCrawler extends WebCrawler {
             System.out.println("Html length: " + html.length());
             System.out.println("Number of outgoing links: " + links.size());
         }
+    }
+
+    private static void writeFile(String[] infos, String file, String url) throws IOException {
+        FileWriter fw = new FileWriter(file, true);
+        for(String s : infos) {
+            fw.write(s + "\r\n");
+        }
+        fw.append("url: " + url);
+        fw.close();
     }
 }

@@ -8,6 +8,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class ParseDianYingTianTang {
+
+    public static final String FILEPATH = "D:\\crawler\\movie.txt";
     Document document;
     private String pageString;
     private String[] infos;
