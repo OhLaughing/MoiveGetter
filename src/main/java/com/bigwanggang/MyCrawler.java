@@ -1,11 +1,12 @@
 package com.bigwanggang;
 
+import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
-import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
@@ -54,9 +55,11 @@ public class MyCrawler extends WebCrawler {
                 parseDianYingTianTang.parse();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (XpathSyntaxErrorException e) {
+                e.printStackTrace();
             }
 
-            String[] strings = parseDianYingTianTang.getInfos();
+            String strings = parseDianYingTianTang.getInfos();
             try {
                 writeFile(strings, ParseDianYingTianTang.FILEPATH, url);
             } catch (Exception e) {
@@ -70,12 +73,16 @@ public class MyCrawler extends WebCrawler {
         }
     }
 
-    private static void writeFile(String[] infos, String file, String url) throws IOException {
-        FileWriter fw = new FileWriter(file, true);
-        for(String s : infos) {
-            fw.write(s + "\r\n");
+    private static void writeFile(String infos, String file, String url) throws IOException {
+        if (infos == null || "".equals(infos.trim()))
+            return;
+        File file1 = new File(file);
+        if (!file1.getParentFile().exists()) {
+            file1.getParentFile().mkdirs();
         }
-        fw.append("url: " + url);
+        FileWriter fw = new FileWriter(file, true);
+        fw.write(infos + "\r\n");
+        fw.append("url: " + url + "\n\n\n");
         fw.close();
     }
 }
