@@ -1,18 +1,20 @@
 package com.bigwanggang;
 
+import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
+import cn.wanghaomiao.xpath.model.JXDocument;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ParseDianYingTianTang {
 
     public static final String FILEPATH = "D:\\crawler\\movie.txt";
     Document document;
     private String pageString;
-    private String[] infos;
+    private String infos;
 
     public void getInfoFromURL(String url) throws IOException {
         document = Jsoup.connect(url).get();
@@ -22,17 +24,16 @@ public class ParseDianYingTianTang {
         document = Jsoup.parse(html);
     }
 
-    public void parse() throws IOException {
-        Elements elements = document.getElementsByTag("p");
-        for (Element e : elements) {
-            if (e.text().contains("◎")) {
-                pageString = e.text();
-                infos = pageString.split("◎");
-            }
-        }
+    public void parse() throws IOException, XpathSyntaxErrorException {
+        JXDocument jxDocument = new JXDocument(document);
+        List<Object> rs = jxDocument.sel("//div[@id=Zoom]");
+        if (rs.size() == 1) {
+            Element e = (Element) rs.get(0);
+            infos = e.text().replace("◎", "\n");
+        } else infos = null;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, XpathSyntaxErrorException {
         ParseDianYingTianTang parseDianYingTianTang = new ParseDianYingTianTang();
         parseDianYingTianTang.getInfoFromURL("http://www.ygdy8.net/html/gndy/jddy/20170822/54788.html");
         parseDianYingTianTang.parse();
@@ -42,7 +43,7 @@ public class ParseDianYingTianTang {
         return pageString;
     }
 
-    public String[] getInfos() {
+    public String getInfos() {
         return infos;
     }
 }
