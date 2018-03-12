@@ -13,6 +13,8 @@ public class Controller {
 
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
+        config.setProxyHost("proxy.zte.com.cn");
+        config.setProxyPort(80);
 
         /*
          * Instantiate the controller for this crawl.
