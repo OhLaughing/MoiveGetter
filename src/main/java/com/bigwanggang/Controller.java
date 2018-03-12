@@ -15,6 +15,7 @@ public class Controller {
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setProxyHost("proxy.zte.com.cn");
         config.setProxyPort(80);
+        config.setPolitenessDelay(1000);
 
         /*
          * Instantiate the controller for this crawl.
