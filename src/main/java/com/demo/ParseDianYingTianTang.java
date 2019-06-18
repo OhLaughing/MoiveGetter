@@ -1,4 +1,4 @@
-package com.bigwanggang;
+package com.demo;
 
 import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
 import cn.wanghaomiao.xpath.model.JXDocument;

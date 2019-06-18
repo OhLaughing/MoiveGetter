@@ -1,4 +1,4 @@
-package com.bigwanggang;
+package com.demo;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

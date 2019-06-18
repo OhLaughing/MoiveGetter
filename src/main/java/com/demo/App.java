@@ -1,4 +1,4 @@
-package com.bigwanggang;
+package com.demo;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
