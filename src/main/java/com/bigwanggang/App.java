@@ -1,31 +1,43 @@
 package com.bigwanggang;
 
-import cn.wanghaomiao.xpath.exception.XpathSyntaxErrorException;
-import cn.wanghaomiao.xpath.model.JXDocument;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import edu.uci.ics.crawler4j.crawler.CrawlConfig;
+import edu.uci.ics.crawler4j.crawler.CrawlController;
+import edu.uci.ics.crawler4j.fetcher.PageFetcher;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-/**
- * Hello world!
- */
 public class App {
-    public static void main(String[] args) throws XpathSyntaxErrorException, IOException {
+    public static void main(String[] args) throws Exception {
+        String crawlStorageFolder = "E:\\crawler";
+        int numberOfCrawlers = 7;
 
+        CrawlConfig config = new CrawlConfig();
+        config.setCrawlStorageFolder(crawlStorageFolder);
+//        config.setProxyHost("proxy.zte.com.cn");
+//        config.setProxyPort(80);
+        config.setPolitenessDelay(1000);
 
-        Document document = Jsoup.parse(new File("d:\\workspace\\ideaCode\\crawler-master\\3.html"), "gb2312");
+        /*
+         * Instantiate the controller for this crawl.
+         */
+        PageFetcher pageFetcher = new PageFetcher(config);
+        RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+        RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+        CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 
-        System.out.println();
-        String a = "//*[@id=\"header\"]/div/div[3]/div[3]/div[2]/div[1]/div[1]/form/span/a";
-        JXDocument jxDocument = new JXDocument(document);
-//        List<Object> rs = jxDocument.sel("//*[@id="Zoom"]/span/p[5]/font[9]");
-        List<Object> rs = jxDocument.sel("//div[@id=Zoom]");
-        System.out.println(rs.size());
-        Element e = (Element) rs.get(0);
-        System.out.println(e.text().replace("【", "\n"));
+        /*
+         * For each crawl, you need to add some seed urls. These are the first
+         * URLs that are fetched and then the crawler starts following links
+         * which are found in these pages
+         */
+        controller.addSeed("http://www.dytt8.net/html/gndy/dyzz/index.html");
+        controller.addSeed("http://www.ygdy8.net/html/gndy/dyzz/index.html");
+//        controller.addSeed("http://www.ics.uci.edu/");
+
+        /*
+         * Start the crawl. This is a blocking operation, meaning that your code
+         * will reach the line after this only when crawling is finished.
+         */
+        controller.start(MyCrawler.class, numberOfCrawlers);
     }
 }

@@ -35,7 +35,7 @@ public class ParseDianYingTianTang {
 
     public static void main(String[] args) throws IOException, XpathSyntaxErrorException {
         ParseDianYingTianTang parseDianYingTianTang = new ParseDianYingTianTang();
-        parseDianYingTianTang.getInfoFromURL("http://www.ygdy8.net/html/gndy/jddy/20170822/54788.html");
+        parseDianYingTianTang.getInfoFromURL("http://www.ygdy8.net/html/gndy/dyzz/index.html");
         parseDianYingTianTang.parse();
     }
 
