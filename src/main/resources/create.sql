@@ -7,6 +7,7 @@ CREATE TABLE MOIVE (
   year YEAR,
   country char(50),
   category CHAR(50),
+  tag CHAR(100),
   language char(50),
   imdb_score DOUBLE,
   douban_score double,
