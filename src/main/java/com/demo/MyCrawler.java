@@ -9,6 +9,7 @@ import edu.uci.ics.crawler4j.url.WebURL;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class MyCrawler extends WebCrawler {
             "主　　演\\s*(.*)\\s*.*标　　签\\s*(.*)\\s*.*简　　介\\s*(.*)【下载地址】");
 
     public static final String sql ="insert into MOIVE(chinese_name, english_name, director, performer, year, country,category," +
-            "tag, language, imdb_score, douban_score, file_length, url) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            "tag, language, imdb_score, douban_score, film_length, url) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
             + "|png|mp3|mp4|zip|gz))$");
@@ -126,8 +127,8 @@ public class MyCrawler extends WebCrawler {
                 ps.setString(7, category);
                 ps.setString(8, tag);
                 ps.setString(9, language);
-                ps.setLong(10, Long.valueOf(imdbScore));
-                ps.setLong(11, Long.valueOf(doubanScore));
+                ps.setDouble(10, Double.valueOf(imdbScore));
+                ps.setDouble(11, Double.valueOf(doubanScore));
                 ps.setInt(12, Integer.valueOf(length));
                 ps.setString(13, "");
             } catch (SQLException e) {
@@ -168,8 +169,8 @@ public class MyCrawler extends WebCrawler {
             String category = m.group(5).trim();
             String language = m.group(6).trim();
             String imdbScore = m.group(7).trim();
-            String doubanScore = m.group(8).trim();
-            String length = m.group(9).trim();
+            String doubanScore = m.group(8).trim().replaceAll("　", "");
+            String length = m.group(9).trim().replaceAll("　", "");
             String director = m.group(10).trim();
             String mainActor = m.group(11).trim();
             String tag = m.group(12).trim();
@@ -186,8 +187,8 @@ public class MyCrawler extends WebCrawler {
                 ps.setString(7, category);
                 ps.setString(8, tag);
                 ps.setString(9, language);
-                ps.setLong(10, Long.valueOf(imdbScore));
-                ps.setLong(11, Long.valueOf(doubanScore));
+                ps.setDouble(10, Double.valueOf(imdbScore));
+                ps.setDouble(11, Double.valueOf(doubanScore));
                 ps.setInt(12, Integer.valueOf(length));
                 ps.setString(13, "");
                 int i = ps.executeUpdate();
