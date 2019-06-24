@@ -13,7 +13,7 @@ public class DbResource {
     private static DbResource dbResource = new DbResource();
 
     private DbResource() {
-        String dbFile = "jdbc:sqlite:moive.db";
+        String dbFile = "jdbc:sqlite:src\\main\\resources\\moive.db";
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(dbFile);

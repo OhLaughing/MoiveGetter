@@ -1,7 +1,7 @@
 CREATE TABLE MOIVE (
   ID INTEGER PRIMARY KEY   AUTOINCREMENT,
   chinese_name char(100),
-  english_name char(100),
+  english_name char(100) UNIQUE ,
   director char(50),
   performer char(500),
   year YEAR,

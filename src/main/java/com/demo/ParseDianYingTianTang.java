@@ -11,7 +11,6 @@ import java.util.List;
 
 public class ParseDianYingTianTang {
 
-    public static final String FILEPATH = "D:\\crawler\\movie.txt";
     Document document;
     private String pageString;
     private String infos;
@@ -35,7 +34,7 @@ public class ParseDianYingTianTang {
 
     public static void main(String[] args) throws IOException, XpathSyntaxErrorException {
         ParseDianYingTianTang parseDianYingTianTang = new ParseDianYingTianTang();
-        parseDianYingTianTang.getInfoFromURL("http://www.ygdy8.net/html/gndy/dyzz/index.html");
+        parseDianYingTianTang.getInfoFromURL("https://www.dytt8.net/html/gndy/dyzz/index.html");
         parseDianYingTianTang.parse();
     }
 

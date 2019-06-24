@@ -30,7 +30,7 @@ public class App {
          * URLs that are fetched and then the crawler starts following links
          * which are found in these pages
          */
-        controller.addSeed("http://www.dytt8.net/html/gndy/dyzz/index.html");
+        controller.addSeed("https://www.dytt8.net/html/gndy/dyzz/index.html");
         controller.addSeed("http://www.ygdy8.net/html/gndy/dyzz/index.html");
 //        controller.addSeed("http://www.ics.uci.edu/");
 
