@@ -32,12 +32,6 @@ public class ParseDianYingTianTang {
         } else infos = null;
     }
 
-    public static void main(String[] args) throws IOException, XpathSyntaxErrorException {
-        ParseDianYingTianTang parseDianYingTianTang = new ParseDianYingTianTang();
-        parseDianYingTianTang.getInfoFromURL("https://www.dytt8.net/html/gndy/dyzz/index.html");
-        parseDianYingTianTang.parse();
-    }
-
     public String getPageString() {
         return pageString;
     }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -33,6 +34,8 @@ public class MyCrawler extends WebCrawler {
     public static final Pattern ACTORS = Pattern.compile("主　　演\\s*(.*)");
     public static final Pattern TAG = Pattern.compile("标　　签\\s*(.*)");
     public static final Pattern DESC = Pattern.compile("简　　介\\s*(.*)【下载地址】");
+    public static final Pattern Score_point = Pattern.compile("(\\d+.\\d+)");
+    public static final Pattern Score = Pattern.compile("(\\d+)");
 
 
     public static final String sql = "INSERT INTO MOIVE(chinese_name, english_name, director, performer, year, country,category," +
@@ -86,7 +89,11 @@ public class MyCrawler extends WebCrawler {
             String strings = parseDianYingTianTang.getInfos();
 
 //                writeFile(strings, ParseDianYingTianTang.FILEPATH, url);
-            writeInfoToDb(strings, url);
+            try {
+                writeInfoToDb(strings, url);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
@@ -109,7 +116,7 @@ public class MyCrawler extends WebCrawler {
         fw.close();
     }
 
-    public static void writeInfoToDb(String infos, String url) {
+    public static void writeInfoToDb(String infos, String url) throws UnsupportedEncodingException {
         Connection c = DbResource.getConnection();
         Matcher chinese_matcher = CHINESE_NAME_PATTERN.matcher(infos);
         Matcher english_matcher = ENGLISTH_NAME_PATTERN.matcher(infos);
@@ -159,8 +166,9 @@ public class MyCrawler extends WebCrawler {
             String country = if_country ? country_m.group(1).trim() : "";
             String category = if_category ? category_m.group(1).trim() : "";
             String languageStr = if_language ? language.group(1).trim() : "";
-            String imdbScore = if_imdb ? imdb.group(1).trim().replaceAll("　", "") : "0";
-            String doubanScore = if_douban ? douban.group(1).trim().replaceAll("　", "") : "0";
+            String imdbScore = getScore(if_imdb, imdb);
+
+            String doubanScore = getScore(if_douban, douban);
 
             String directorStr = if_director ? director.group(1).trim() : "";
             String mainActor = if_actor ? actor.group(1).trim() : "";
@@ -190,6 +198,27 @@ public class MyCrawler extends WebCrawler {
             log.info("###match moive info failuee");
 
         }
+    }
+
+    private static String getScore(boolean if_imdb, Matcher imdb) {
+        String score = "0";
+        if (if_imdb) {
+            score = imdb.group(1).trim();
+            if (score.contains(".")) {
+                Matcher m = Score_point.matcher(score);
+                if(m.find()){
+                    score = m.group(1);
+                }
+            } else {
+                Matcher m = Score.matcher(score);
+                if(m.find()){
+                    if(m.find()){
+                        score = m.group(1);
+                    }
+                }
+            }
+        }
+        return score;
     }
 
     public static void main(String[] args) {
