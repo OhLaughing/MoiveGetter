@@ -27,7 +27,7 @@ public class MyCrawler extends WebCrawler {
     public static final Pattern COUNTRY = Pattern.compile("产　　地\\s*(.*)");
     public static final Pattern CATEGORY = Pattern.compile("类　　别\\s*(.*)");
     public static final Pattern LANGUAGE = Pattern.compile("语　　言\\s*(.*)");
-    public static final Pattern IMDB_SCORE = Pattern.compile("IMDb评分\\s*(.*)/10");
+    public static final Pattern IMDB_SCORE = Pattern.compile("[i,I][m,M][d,D][b,B]评分\\s*(.*)/10");
     public static final Pattern DOUBAN = Pattern.compile("豆瓣评分\\s*(.*)/10");
     public static final Pattern LENGTH = Pattern.compile("片　　长\\s*(.*)分钟");
     public static final Pattern DIRECTOR = Pattern.compile("导　　演\\s*(.*)");
@@ -144,7 +144,7 @@ public class MyCrawler extends WebCrawler {
         boolean if_tag = tag.find();
         boolean if_len = length.find();
 
-        boolean if_score = if_imdb && if_douban;
+        boolean if_score = if_imdb || if_douban;
 
         if (if_chinese && if_enlisth && if_score) {
             log.info("chinese: " + if_chinese);
@@ -192,11 +192,26 @@ public class MyCrawler extends WebCrawler {
                 int i = ps.executeUpdate();
                 log.info("###write to db result: " + i);
             } catch (SQLException e) {
-                e.printStackTrace();
+                String message = e.getMessage();
+                if (message.contains("SQLITE_CONSTRAINT_UNIQUE")) {
+                    log.info(chineseName + " has saved in db");
+                } else {
+                    e.printStackTrace();
+                }
             }
         } else {
             log.info("###match moive info failuee");
-
+            log.info("chinese: " + if_chinese);
+            log.info("english: " + if_enlisth);
+            log.info("if_year: " + if_year);
+            log.info("if_country: " + if_country);
+            log.info("if_category: " + if_category);
+            log.info("if_language: " + if_language);
+            log.info("if_imdb: " + if_imdb);
+            log.info("if_douban: " + if_douban);
+            log.info("if_director: " + if_director);
+            log.info("if_actor: " + if_actor);
+            log.info("if_tag: " + if_tag);
         }
     }
 
@@ -206,13 +221,13 @@ public class MyCrawler extends WebCrawler {
             score = imdb.group(1).trim();
             if (score.contains(".")) {
                 Matcher m = Score_point.matcher(score);
-                if(m.find()){
+                if (m.find()) {
                     score = m.group(1);
                 }
             } else {
                 Matcher m = Score.matcher(score);
-                if(m.find()){
-                    if(m.find()){
+                if (m.find()) {
+                    if (m.find()) {
                         score = m.group(1);
                     }
                 }
